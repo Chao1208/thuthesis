@@ -1,11 +1,22 @@
 # Makefile for ThuThesis
 
 PACKAGE = thuthesis
-THESIS  = thuthesis-example
+THESIS  = my-thesis
 SPINE   = spine
 
 SOURCES = $(PACKAGE).ins $(PACKAGE).dtx
 CLSFILE = dtx-style.sty $(PACKAGE).cls
+
+# Add LaTeX to PATH on macOS if not already present
+ifneq ($(OS),Windows_NT)
+  ifeq ($(shell uname),Darwin)
+    TEXBIN := /Library/TeX/texbin
+    ifneq ($(wildcard $(TEXBIN)),)
+      PATH := $(TEXBIN):$(PATH)
+      export PATH
+    endif
+  endif
+endif
 
 LATEXMK = latexmk
 SHELL  := /usr/bin/env bash
@@ -28,14 +39,17 @@ all-dev: doc all
 cls: $(CLSFILE)
 
 $(CLSFILE): $(SOURCES)
+	@if [ -d /Library/TeX/texbin ]; then export PATH="/Library/TeX/texbin:$$PATH"; fi; \
 	xetex $(PACKAGE).ins
 
 doc: $(PACKAGE).pdf
 
 $(PACKAGE).pdf: cls FORCE_MAKE
+	@if [ -d /Library/TeX/texbin ]; then export PATH="/Library/TeX/texbin:$$PATH"; fi; \
 	$(LATEXMK) $(PACKAGE).dtx
 
 $(THESIS).pdf: cls FORCE_MAKE
+	@if [ -d /Library/TeX/texbin ]; then export PATH="/Library/TeX/texbin:$$PATH"; fi; \
 	$(LATEXMK) $(THESIS)
 
 viewdoc: doc
@@ -59,11 +73,12 @@ else
 endif
 
 clean:
-	$(LATEXMK) -c $(PACKAGE).dtx $(THESIS)
+	@if [ -d /Library/TeX/texbin ]; then export PATH="/Library/TeX/texbin:$$PATH"; fi; \
+	$(LATEXMK) -c $(PACKAGE).dtx $(THESIS) thuthesis-example
 	-@$(RM) -rf *~ main-survey.* main-translation.* _markdown_thuthesis* thuthesis.markdown.*
 
 cleanall: clean
-	-@$(RM) $(PACKAGE).pdf $(THESIS).pdf
+	-@$(RM) $(PACKAGE).pdf $(THESIS).pdf thuthesis-example.pdf
 
 distclean: cleanall
 	-@$(RM) $(CLSFILE)

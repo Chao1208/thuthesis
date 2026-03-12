@@ -1,0 +1,11 @@
+% 自定义配置：覆盖 thusetup.tex 中的字体设置
+% 使用 fandol 开源字体（适用于 macOS/Linux）
+
+% 重新设置数学字体为空，避免加载 xits-math
+\ExplSyntaxOn
+\keys_set:nn { thu }
+  {
+    math-font = ,  % 不加载额外的数学字体
+  }
+\ExplSyntaxOff
+

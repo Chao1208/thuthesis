@@ -1,3 +1,37 @@
+## ===== 论文个人定制 ignore =====
+
+## 编译产物 PDF（my-thesis.pdf 由 LaTeX 生成，myfigure/*.pdf 由脚本生成）
+my-thesis.pdf
+my-thesis.xdv
+2023211534-*.pdf
+myfigure/*.pdf
+
+## 临时备份文件
+mydata/*_backup.tex
+mydata/*_expanded.tex
+
+## 中文说明文档（临时报告，不需要版本管理）
+*.txt
+改造工作完成总结.txt
+图表修改说明.txt
+参考文献增补说明.txt
+第三章扩展工作总结.txt
+*完成报告.md
+*完成说明.md
+*完成总结.md
+*修改说明.md
+*解决方案.md
+图表格式规范修正说明.md
+数学公式*.md
+缩略词整理完成说明.md
+第二三章改造完成报告.md
+第三章扩展*.md
+最新修改说明.md
+字体问题修复报告.md
+参考文献整理完成报告.md
+开始填写指南.md
+
+## macOS
 ## distribution files
 .DS_Store
 package-lock.json
