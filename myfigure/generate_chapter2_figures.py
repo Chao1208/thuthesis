@@ -1,456 +1,269 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-生成第二章理论综述的图表
-包括：AMO框架、IMOI模型、开放式创新模型
+生成第二章理论综述的图表（黑白打印版 v5）
+- 10pt 宋体 / Times New Roman（figsize=显示宽度，不缩放）
+- 纹理区分模块
+- 修正标签与主文字重叠问题
 """
 
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Circle, Rectangle
-import matplotlib.lines as mlines
-import numpy as np
+from matplotlib.patches import FancyBboxPatch, Circle
 
-# 设置中文字体和样式
-plt.rcParams['font.sans-serif'] = ['Arial Unicode MS', 'SimHei', 'STHeiti']
-plt.rcParams['axes.unicode_minus'] = False
-plt.rcParams['figure.dpi'] = 300
+# thuthesis: A4, margin=3cm → textwidth=150mm=5.91in
+DISPLAY_W = 5.91
 
-# 专业配色方案
-COLORS = {
-    'primary': '#2E86AB',
-    'secondary': '#A23B72',
-    'tertiary': '#F18F01',
-    'success': '#06A77D',
-    'warning': '#D2691E',
-    'info': '#4682B4',
-    'purple': '#7B68EE'
-}
+plt.rcParams.update({
+    'font.family': 'serif',
+    'font.serif': ['Songti SC', 'STSong', 'SimSun', 'Times New Roman'],
+    'mathtext.fontset': 'stix',
+    'axes.unicode_minus': False,
+    'figure.dpi': 300,
+    'figure.facecolor': 'white',
+    'savefig.facecolor': 'white',
+    'hatch.linewidth': 0.5,
+})
+
+FS = 10
+
+def _tbg():
+    return dict(boxstyle='square,pad=0.1', facecolor='white',
+                edgecolor='none', alpha=1.0)
+
+def _lbl():
+    return dict(boxstyle='round,pad=0.2', facecolor='white',
+                edgecolor='black', linewidth=0.6)
+
+def _save(fig, name):
+    fig.savefig(name, bbox_inches='tight', dpi=300,
+                facecolor='white', edgecolor='none')
+    print(f"  -> {name}")
+    plt.close(fig)
 
 
+# ============================================================
+# 图 2.1  AMO 框架
+# ============================================================
 def create_amo_framework():
-    """创建AMO框架图"""
-    fig, ax = plt.subplots(figsize=(12, 8))
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 10)
+    W = DISPLAY_W
+    H = W * 0.82
+    fig, ax = plt.subplots(figsize=(W, H))
+    # 用更宽的坐标范围，给标签留空间
+    ax.set_xlim(-1, 11)
+    ax.set_ylim(-0.5, 11.5)
     ax.axis('off')
-    
-    # 中心圆 - 员工绩效
-    center_circle = Circle((5, 5), 1.2, 
-                          facecolor=COLORS['primary'], 
-                          edgecolor='white',
-                          linewidth=3,
-                          alpha=0.9)
-    ax.add_patch(center_circle)
-    ax.text(5, 5, '员工\n绩效', 
-           ha='center', va='center',
-           fontsize=18, fontweight='bold', color='white')
-    
-    # 三个要素圆
-    # Ability - 能力
-    ability_circle = Circle((2.5, 7.5), 1, 
-                           facecolor=COLORS['secondary'], 
-                           edgecolor='white',
-                           linewidth=2.5,
-                           alpha=0.85)
-    ax.add_patch(ability_circle)
-    ax.text(2.5, 7.8, '能力', 
-           ha='center', va='center',
-           fontsize=16, fontweight='bold', color='white')
-    ax.text(2.5, 7.2, 'Ability', 
-           ha='center', va='center',
-           fontsize=12, color='white', style='italic')
-    
-    # Motivation - 动机
-    motivation_circle = Circle((7.5, 7.5), 1, 
-                              facecolor=COLORS['tertiary'], 
-                              edgecolor='white',
-                              linewidth=2.5,
-                              alpha=0.85)
-    ax.add_patch(motivation_circle)
-    ax.text(7.5, 7.8, '动机', 
-           ha='center', va='center',
-           fontsize=16, fontweight='bold', color='white')
-    ax.text(7.5, 7.2, 'Motivation', 
-           ha='center', va='center',
-           fontsize=12, color='white', style='italic')
-    
-    # Opportunity - 机会
-    opportunity_circle = Circle((5, 2.5), 1, 
-                               facecolor=COLORS['success'], 
-                               edgecolor='white',
-                               linewidth=2.5,
-                               alpha=0.85)
-    ax.add_patch(opportunity_circle)
-    ax.text(5, 2.8, '机会', 
-           ha='center', va='center',
-           fontsize=16, fontweight='bold', color='white')
-    ax.text(5, 2.2, 'Opportunity', 
-           ha='center', va='center',
-           fontsize=12, color='white', style='italic')
-    
-    # 添加箭头连接
-    arrow_props = dict(
-        arrowstyle='->',
-        lw=2.5,
-        alpha=0.7,
-        mutation_scale=20
-    )
-    
-    # 从能力到绩效
-    ax.annotate('', xy=(4.2, 5.8), xytext=(3.2, 6.8),
-                arrowprops={**arrow_props, 'color': COLORS['secondary']})
-    
-    # 从动机到绩效
-    ax.annotate('', xy=(5.8, 5.8), xytext=(6.8, 6.8),
-                arrowprops={**arrow_props, 'color': COLORS['tertiary']})
-    
-    # 从机会到绩效
-    ax.annotate('', xy=(5, 3.7), xytext=(5, 3.5),
-                arrowprops={**arrow_props, 'color': COLORS['success']})
-    
-    # 添加详细说明
-    # 能力说明
-    ability_text = [
-        '• 知识水平',
-        '• 技能熟练度',
-        '• 专业能力',
-        '• 学习能力'
+
+    # 中心圆：员工绩效 —— 斑点
+    ax.add_patch(Circle((5, 5), 1.4, facecolor='white', edgecolor='black',
+                        linewidth=1.5, hatch='..', zorder=1))
+    ax.text(5, 5.35, '员工绩效', ha='center', va='center',
+            fontsize=FS, fontweight='bold', bbox=_tbg(), zorder=2)
+    ax.text(5, 4.55, 'Performance', ha='center', va='center',
+            fontsize=FS, fontfamily='Times New Roman', style='italic',
+            bbox=_tbg(), zorder=2)
+
+    # 三要素圆 —— 纹理各不同
+    elems = [
+        {'xy': (2, 8.2), 'cn': '能力', 'en': 'Ability',    'h': '//'},
+        {'xy': (8, 8.2), 'cn': '动机', 'en': 'Motivation',  'h': '\\\\'},
+        {'xy': (5, 1.5), 'cn': '机会', 'en': 'Opportunity', 'h': 'xx'},
     ]
-    y_pos = 9.3
-    for text in ability_text:
-        ax.text(2.5, y_pos, text,
-               ha='center', va='center',
-               fontsize=9, color=COLORS['secondary'],
-               bbox=dict(boxstyle='round,pad=0.3', 
-                        facecolor='white', 
-                        edgecolor=COLORS['secondary'],
-                        alpha=0.8))
-        y_pos -= 0.35
-    
-    # 动机说明
-    motivation_text = [
-        '• 内在动机',
-        '• 外在激励',
-        '• 工作热情',
-        '• 目标导向'
-    ]
-    y_pos = 9.3
-    for text in motivation_text:
-        ax.text(7.5, y_pos, text,
-               ha='center', va='center',
-               fontsize=9, color=COLORS['tertiary'],
-               bbox=dict(boxstyle='round,pad=0.3', 
-                        facecolor='white', 
-                        edgecolor=COLORS['tertiary'],
-                        alpha=0.8))
-        y_pos -= 0.35
-    
-    # 机会说明
-    opportunity_text = [
-        '• 参与决策',
-        '• 资源支持',
-        '• 成长机会',
-        '• 工作自主性'
-    ]
-    x_pos = 2.8
-    for text in opportunity_text:
-        ax.text(x_pos, 1.2, text,
-               ha='center', va='center',
-               fontsize=9, color=COLORS['success'],
-               bbox=dict(boxstyle='round,pad=0.3', 
-                        facecolor='white', 
-                        edgecolor=COLORS['success'],
-                        alpha=0.8))
-        x_pos += 1.5
-    
-    # 添加标题
-    plt.title('AMO框架：员工绩效的三要素模型', 
-             fontsize=18, fontweight='bold', pad=15)
-    
-    # 添加说明文字
-    ax.text(5, 0.3, '数据来源：Bos-Nehles et al. (2023), 汤超颖等(2022)', 
-           ha='center', va='center',
-           fontsize=9, style='italic', color='gray')
-    
-    plt.tight_layout()
-    plt.savefig('amo-framework.pdf', 
-               bbox_inches='tight', dpi=300,
-               facecolor='white', edgecolor='none')
-    print("✓ 已生成图2.1: amo-framework.pdf")
-    plt.close()
+    for e in elems:
+        ax.add_patch(Circle(e['xy'], 1.1, facecolor='white', edgecolor='black',
+                            linewidth=1.5, hatch=e['h'], zorder=1))
+        ax.text(e['xy'][0], e['xy'][1] + 0.25, e['cn'], ha='center', va='center',
+                fontsize=FS, fontweight='bold', bbox=_tbg(), zorder=2)
+        ax.text(e['xy'][0], e['xy'][1] - 0.35, e['en'], ha='center', va='center',
+                fontsize=FS, fontfamily='Times New Roman', style='italic',
+                bbox=_tbg(), zorder=2)
+
+    # 箭头
+    akw = dict(arrowstyle='->', lw=1.2, color='black', mutation_scale=14)
+    ax.annotate('', xy=(3.95, 5.95), xytext=(2.85, 7.3), arrowprops=akw)
+    ax.annotate('', xy=(6.05, 5.95), xytext=(7.15, 7.3), arrowprops=akw)
+    ax.annotate('', xy=(5, 3.7),     xytext=(5, 2.6),     arrowprops=akw)
+
+    # 标签 —— 放在圆的外侧，不与圆内文字重叠
+    # 能力标签（左上方，纵向排列，圆上方）
+    a_items = ['知识水平', '技能熟练度', '专业能力', '学习能力']
+    for i, t in enumerate(a_items):
+        ax.text(-0.3, 10.8 - i * 0.55, t, ha='center', va='center',
+                fontsize=FS, bbox=_lbl(), zorder=3)
+
+    # 能力标签 → 圆的连线
+    ax.plot([-0.3, 2], [9.2, 9.3], color='black', lw=0.6, ls=':', zorder=0)
+
+    # 动机标签（右上方）
+    m_items = ['内在动机', '外在激励', '工作热情', '目标导向']
+    for i, t in enumerate(m_items):
+        ax.text(10.3, 10.8 - i * 0.55, t, ha='center', va='center',
+                fontsize=FS, bbox=_lbl(), zorder=3)
+
+    ax.plot([10.3, 8], [9.2, 9.3], color='black', lw=0.6, ls=':', zorder=0)
+
+    # 机会标签（底部横向排列）
+    o_items = ['参与决策', '资源支持', '成长机会', '工作自主性']
+    for i, t in enumerate(o_items):
+        ax.text(1.8 + i * 2.15, -0.2, t, ha='center', va='center',
+                fontsize=FS, bbox=_lbl(), zorder=3)
+
+    ax.plot([5, 5], [0.4, 0.15], color='black', lw=0.6, ls=':', zorder=0)
+
+    fig.tight_layout()
+    _save(fig, 'amo-framework.pdf')
 
 
+# ============================================================
+# 图 2.2  I-M-O-I 模型
+# ============================================================
 def create_imoi_model():
-    """创建I-M-O-I团队效能模型图"""
-    fig, ax = plt.subplots(figsize=(14, 6))
+    W = DISPLAY_W
+    H = W * 0.50  # 给标签更多高度
+    fig, ax = plt.subplots(figsize=(W, H))
     ax.set_xlim(0, 14)
-    ax.set_ylim(0, 6)
+    ax.set_ylim(0, 7.5)
     ax.axis('off')
-    
-    # 定义四个阶段的框
+
+    bw, bh = 2.5, 1.8
+    by = 2.5  # 框的底部y坐标
+
     stages = [
-        {'x': 0.5, 'y': 2, 'w': 2.5, 'h': 2, 'title': '投入\nInput', 
-         'color': COLORS['primary']},
-        {'x': 4, 'y': 2, 'w': 2.5, 'h': 2, 'title': '中介\nMediator', 
-         'color': COLORS['secondary']},
-        {'x': 7.5, 'y': 2, 'w': 2.5, 'h': 2, 'title': '产出\nOutput', 
-         'color': COLORS['tertiary']},
-        {'x': 11, 'y': 2, 'w': 2.5, 'h': 2, 'title': '再投入\nInput', 
-         'color': COLORS['success']}
+        {'x': 0.5,  'cn': '投入',   'en': 'Input',    'h': '//',
+         'items': ['组织情境', '团队特征', '个体特征']},
+        {'x': 4.0,  'cn': '中介',   'en': 'Mediator', 'h': '\\\\',
+         'items': ['团队过程', '涌现状态', '协作机制']},
+        {'x': 7.5,  'cn': '产出',   'en': 'Output',   'h': '..',
+         'items': ['团队绩效', '成员满意度', '创新产出']},
+        {'x': 11.0, 'cn': '再投入', 'en': 'Input',    'h': 'xx',
+         'items': ['经验积累', '能力提升', '关系深化']},
     ]
-    
-    for stage in stages:
-        box = FancyBboxPatch(
-            (stage['x'], stage['y']), stage['w'], stage['h'],
-            boxstyle="round,pad=0.1",
-            edgecolor=stage['color'],
-            facecolor=stage['color'],
-            alpha=0.85,
-            linewidth=3
-        )
+
+    for s in stages:
+        box = FancyBboxPatch((s['x'], by), bw, bh, boxstyle='round,pad=0.1',
+                             facecolor='white', edgecolor='black',
+                             linewidth=1.5, hatch=s['h'], zorder=1)
         ax.add_patch(box)
-        ax.text(stage['x'] + stage['w']/2, stage['y'] + stage['h']/2, 
-               stage['title'],
-               ha='center', va='center',
-               fontsize=14, fontweight='bold', color='white')
-    
-    # 添加箭头
-    arrow_props = dict(
-        arrowstyle='->',
-        lw=3,
-        alpha=0.8,
-        mutation_scale=25
-    )
-    
-    # Input -> Mediator
-    ax.annotate('', xy=(4, 3), xytext=(3, 3),
-               arrowprops={**arrow_props, 'color': '#666666'})
-    
-    # Mediator -> Output
-    ax.annotate('', xy=(7.5, 3), xytext=(6.5, 3),
-               arrowprops={**arrow_props, 'color': '#666666'})
-    
-    # Output -> Input (反馈环)
-    ax.annotate('', xy=(11, 3), xytext=(10, 3),
-               arrowprops={**arrow_props, 'color': '#666666'})
-    
-    # 反馈箭头（从右侧回到左侧）
-    ax.annotate('', xy=(1.75, 1.8), xytext=(12.25, 1.8),
-               arrowprops={**arrow_props, 'color': COLORS['warning'],
-                          'linestyle': 'dashed', 'lw': 2.5})
-    ax.text(7, 1.3, '反馈循环', 
-           ha='center', va='center',
-           fontsize=11, color=COLORS['warning'],
-           fontweight='bold', style='italic')
-    
-    # 添加详细内容
-    input_items = [
-        '组织情境', '团队特征', '个体特征'
-    ]
-    y_pos = 4.5
-    for item in input_items:
-        ax.text(1.75, y_pos, f'• {item}',
-               ha='center', va='center',
-               fontsize=9, color='white')
-        y_pos += 0.3
-    
-    mediator_items = [
-        '团队过程', '涌现状态', '协作机制'
-    ]
-    y_pos = 4.5
-    for item in mediator_items:
-        ax.text(5.25, y_pos, f'• {item}',
-               ha='center', va='center',
-               fontsize=9, color='white')
-        y_pos += 0.3
-    
-    output_items = [
-        '团队绩效', '成员满意度', '创新产出'
-    ]
-    y_pos = 4.5
-    for item in output_items:
-        ax.text(8.75, y_pos, f'• {item}',
-               ha='center', va='center',
-               fontsize=9, color='white')
-        y_pos += 0.3
-    
-    # 添加标题
-    plt.title('I-M-O-I团队效能循环模型', 
-             fontsize=18, fontweight='bold', pad=15)
-    
-    # 添加说明文字
-    ax.text(7, 0.3, '数据来源：Mathieu et al. (2008)', 
-           ha='center', va='center',
-           fontsize=9, style='italic', color='gray')
-    
-    plt.tight_layout()
-    plt.savefig('imoi-model.pdf', 
-               bbox_inches='tight', dpi=300,
-               facecolor='white', edgecolor='none')
-    print("✓ 已生成图2.2: imoi-model.pdf")
-    plt.close()
+        cx = s['x'] + bw / 2
+        cy = by + bh / 2
+        ax.text(cx, cy + 0.25, s['cn'], ha='center', va='center',
+                fontsize=FS, fontweight='bold', bbox=_tbg(), zorder=2)
+        ax.text(cx, cy - 0.30, s['en'], ha='center', va='center',
+                fontsize=FS, fontfamily='Times New Roman', style='italic',
+                bbox=_tbg(), zorder=2)
+
+        # 子项：框上方，间距加大
+        for j, item in enumerate(s['items']):
+            ax.text(cx, by + bh + 0.35 + j * 0.52, item,
+                    ha='center', va='center',
+                    fontsize=FS, bbox=_lbl(), zorder=3)
+
+    # 正向箭头
+    akw = dict(arrowstyle='->', lw=1.5, color='black', mutation_scale=16)
+    for xf, xt in [(3.0, 4.0), (6.5, 7.5), (10.0, 11.0)]:
+        ax.annotate('', xy=(xt, by + bh / 2), xytext=(xf, by + bh / 2),
+                    arrowprops=akw)
+
+    # 反馈虚线
+    ax.annotate('', xy=(1.75, 2.15), xytext=(12.25, 2.15),
+                arrowprops=dict(arrowstyle='->', lw=1.2, color='black',
+                                mutation_scale=14, linestyle='dashed'))
+    ax.text(7, 1.5, '反馈循环 (Feedback Loop)', ha='center', va='center',
+            fontsize=FS, style='italic')
+
+    fig.tight_layout()
+    _save(fig, 'imoi-model.pdf')
 
 
+# ============================================================
+# 图 2.3  开放式创新模型
+# ============================================================
 def create_open_innovation_model():
-    """创建开放式创新模型图"""
-    fig, ax = plt.subplots(figsize=(12, 10))
+    W = DISPLAY_W
+    H = W * 0.78
+    fig, ax = plt.subplots(figsize=(W, H))
     ax.set_xlim(0, 12)
     ax.set_ylim(0, 10)
     ax.axis('off')
-    
-    # 中央企业框
-    company_box = FancyBboxPatch(
-        (3, 3), 6, 4,
-        boxstyle="round,pad=0.15",
-        edgecolor=COLORS['primary'],
-        facecolor=COLORS['primary'],
-        alpha=0.2,
-        linewidth=4
-    )
-    ax.add_patch(company_box)
-    ax.text(6, 6.5, '企业创新系统', 
-           ha='center', va='center',
-           fontsize=16, fontweight='bold', 
-           color=COLORS['primary'])
-    
-    # 内部研发
-    internal_box = FancyBboxPatch(
-        (4.5, 4), 3, 1.8,
-        boxstyle="round,pad=0.08",
-        edgecolor=COLORS['secondary'],
-        facecolor=COLORS['secondary'],
-        alpha=0.85,
-        linewidth=2.5
-    )
-    ax.add_patch(internal_box)
-    ax.text(6, 5.2, '内部研发', 
-           ha='center', va='center',
-           fontsize=14, fontweight='bold', color='white')
-    ax.text(6, 4.6, 'Internal R&D', 
-           ha='center', va='center',
-           fontsize=11, color='white', style='italic')
-    
-    # 外部输入源（左侧）
-    external_inputs = [
-        {'y': 8.5, 'text': '大学/研究机构', 'color': COLORS['success']},
-        {'y': 6.5, 'text': '合作伙伴', 'color': COLORS['tertiary']},
-        {'y': 4.5, 'text': '客户/用户', 'color': COLORS['info']},
-        {'y': 2.5, 'text': '供应商', 'color': COLORS['warning']}
+
+    # 企业边界虚线大框（加高，覆盖所有左右连接点 y=2.9~8.3）
+    ax.add_patch(FancyBboxPatch((3.2, 2.2), 5.6, 6.8, boxstyle='round,pad=0.15',
+                                facecolor='white', edgecolor='black',
+                                linewidth=1.5, linestyle='--', zorder=0))
+    ax.text(6, 8.65, '企业创新系统', ha='center', va='center',
+            fontsize=FS, fontweight='bold', zorder=2)
+
+    # 内部研发（网格），居中于大框内
+    ax.add_patch(FancyBboxPatch((4.3, 4.0), 3.4, 2.4, boxstyle='round,pad=0.08',
+                                facecolor='white', edgecolor='black',
+                                linewidth=1.5, hatch='++', zorder=1))
+    ax.text(6, 5.55, '内部研发', ha='center', va='center',
+            fontsize=FS, fontweight='bold', bbox=_tbg(), zorder=2)
+    ax.text(6, 4.8, 'Internal R&D', ha='center', va='center',
+            fontsize=FS, fontfamily='Times New Roman', style='italic',
+            bbox=_tbg(), zorder=2)
+
+    # 左侧输入
+    ax.text(1.3, 9.3, '外部知识输入', ha='center', va='center',
+            fontsize=FS, fontweight='bold')
+
+    in_data = [
+        {'y': 8.3, 'text': '大学/研究机构', 'h': '//'},
+        {'y': 6.5, 'text': '合作伙伴',     'h': '\\\\'},
+        {'y': 4.7, 'text': '客户/用户',     'h': '..'},
+        {'y': 2.9, 'text': '供应商',        'h': 'xx'},
     ]
-    
-    for inp in external_inputs:
-        box = FancyBboxPatch(
-            (0.3, inp['y']-0.4), 2, 0.8,
-            boxstyle="round,pad=0.05",
-            edgecolor=inp['color'],
-            facecolor=inp['color'],
-            alpha=0.8,
-            linewidth=2
-        )
-        ax.add_patch(box)
-        ax.text(1.3, inp['y'], inp['text'],
-               ha='center', va='center',
-               fontsize=11, fontweight='bold', color='white')
-        
-        # 箭头指向企业
-        ax.annotate('', xy=(3, inp['y']), xytext=(2.3, inp['y']),
-                   arrowprops=dict(arrowstyle='->', lw=2, 
-                                  color=inp['color'], alpha=0.7))
-    
-    # 外部输出（右侧）
-    external_outputs = [
-        {'y': 8.5, 'text': '技术转让', 'color': COLORS['purple']},
-        {'y': 6.5, 'text': '开源项目', 'color': COLORS['secondary']},
-        {'y': 4.5, 'text': '产品/服务', 'color': COLORS['tertiary']},
-        {'y': 2.5, 'text': '专利许可', 'color': COLORS['primary']}
+    for d in in_data:
+        ax.add_patch(FancyBboxPatch((0.1, d['y'] - 0.4), 2.4, 0.8,
+                                    boxstyle='round,pad=0.05',
+                                    facecolor='white', edgecolor='black',
+                                    linewidth=1.2, hatch=d['h'], zorder=1))
+        ax.text(1.3, d['y'], d['text'], ha='center', va='center',
+                fontsize=FS, bbox=_tbg(), zorder=2)
+        ax.annotate('', xy=(3.2, d['y']), xytext=(2.5, d['y']),
+                    arrowprops=dict(arrowstyle='->', lw=1.2, color='black'))
+
+    # 右侧输出
+    ax.text(10.7, 9.3, '创新成果输出', ha='center', va='center',
+            fontsize=FS, fontweight='bold')
+
+    out_data = [
+        {'y': 8.3, 'text': '技术转让', 'h': '||'},
+        {'y': 6.5, 'text': '开源项目', 'h': '--'},
+        {'y': 4.7, 'text': '产品/服务', 'h': 'oo'},
+        {'y': 2.9, 'text': '专利许可', 'h': '++'},
     ]
-    
-    for out in external_outputs:
-        box = FancyBboxPatch(
-            (9.7, out['y']-0.4), 2, 0.8,
-            boxstyle="round,pad=0.05",
-            edgecolor=out['color'],
-            facecolor=out['color'],
-            alpha=0.8,
-            linewidth=2
-        )
-        ax.add_patch(box)
-        ax.text(10.7, out['y'], out['text'],
-               ha='center', va='center',
-               fontsize=11, fontweight='bold', color='white')
-        
-        # 箭头从企业指出
-        ax.annotate('', xy=(9.7, out['y']), xytext=(9, out['y']),
-                   arrowprops=dict(arrowstyle='->', lw=2, 
-                                  color=out['color'], alpha=0.7))
-    
-    # 添加标签
-    ax.text(1.3, 9.5, '外部知识输入', 
-           ha='center', va='center',
-           fontsize=13, fontweight='bold', 
-           color=COLORS['success'])
-    
-    ax.text(10.7, 9.5, '创新成果输出', 
-           ha='center', va='center',
-           fontsize=13, fontweight='bold', 
-           color=COLORS['tertiary'])
-    
-    # 双向箭头表示互动
-    ax.text(6, 1.5, '↔', 
-           ha='center', va='center',
-           fontsize=30, color=COLORS['primary'])
-    ax.text(6, 0.9, '双向流动与协同创新', 
-           ha='center', va='center',
-           fontsize=12, fontweight='bold', 
-           color=COLORS['primary'])
-    
-    # 添加标题
-    plt.title('开放式创新模型（Chesbrough）', 
-             fontsize=18, fontweight='bold', pad=15)
-    
-    # 添加说明文字
-    ax.text(6, 0.2, '数据来源：Chesbrough (2003), 高良谋和马文甲(2014), 张震宇和陈劲(2008)', 
-           ha='center', va='center',
-           fontsize=8, style='italic', color='gray')
-    
-    plt.tight_layout()
-    plt.savefig('open-innovation-model.pdf', 
-               bbox_inches='tight', dpi=300,
-               facecolor='white', edgecolor='none')
-    print("✓ 已生成图2.3: open-innovation-model.pdf")
-    plt.close()
+    for d in out_data:
+        ax.add_patch(FancyBboxPatch((9.5, d['y'] - 0.4), 2.4, 0.8,
+                                    boxstyle='round,pad=0.05',
+                                    facecolor='white', edgecolor='black',
+                                    linewidth=1.2, hatch=d['h'], zorder=1))
+        ax.text(10.7, d['y'], d['text'], ha='center', va='center',
+                fontsize=FS, bbox=_tbg(), zorder=2)
+        ax.annotate('', xy=(9.5, d['y']), xytext=(8.8, d['y']),
+                    arrowprops=dict(arrowstyle='->', lw=1.2, color='black'))
+
+    # 底部双向箭头
+    ax.annotate('', xy=(2.5, 1.5), xytext=(9.5, 1.5),
+                arrowprops=dict(arrowstyle='<->', lw=1.5, color='black'))
+    ax.text(6, 1.0, '双向流动与协同创新', ha='center', va='center',
+            fontsize=FS, fontweight='bold')
+
+    fig.tight_layout()
+    _save(fig, 'open-innovation-model.pdf')
 
 
 def main():
-    """主函数"""
-    print("="*60)
-    print("开始生成第二章理论综述图表...")
-    print("="*60)
-    
-    try:
-        create_amo_framework()
-        create_imoi_model()
-        create_open_innovation_model()
-        
-        print("="*60)
-        print("所有图表生成完成！")
-        print("生成的文件：")
-        print("  1. amo-framework.pdf - AMO框架图")
-        print("  2. imoi-model.pdf - IMOI团队效能模型")
-        print("  3. open-innovation-model.pdf - 开放式创新模型")
-        print("="*60)
-        print("请将这些PDF文件保存在 myfigure/ 文件夹")
-        print("然后在 chap02.tex 中添加图表引用")
-        print("="*60)
-        
-    except Exception as e:
-        print(f"生成图表时出错: {e}")
-        import traceback
-        traceback.print_exc()
+    print("=" * 60)
+    print("生成第二章图表（v5：字号+纹理+间距修正）")
+    print("=" * 60)
+    create_amo_framework()
+    create_imoi_model()
+    create_open_innovation_model()
+    print("=" * 60)
+    print("完成！")
 
 
 if __name__ == '__main__':
     main()
-
-

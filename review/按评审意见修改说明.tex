@@ -1,0 +1,160 @@
+\documentclass[11pt,a4paper]{ctexart}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{xeCJK}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\setCJKmainfont{Songti SC}
+\setCJKsansfont{Heiti SC}
+\setmainfont{Times New Roman}
+
+\definecolor{accent}{HTML}{441351}
+\hypersetup{colorlinks=true, linkcolor=accent, urlcolor=accent}
+
+\titleformat{\section}{\sffamily\bfseries\large\color{accent}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\sffamily\bfseries\normalsize\color{accent!80!black}}{\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 按评审意见修改说明}
+\fancyhead[R]{\small 李超 · 2023211534}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\title{\textbf{按评审意见修改说明}\\
+\large《互联网公司研发管理面临的困境及应对策略研究——以B公司为例》}
+\author{李超 \quad 学号：2023211534 \quad 指导教师：肖勇波 教授}
+\date{2026 年 5 月 12 日}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{fancy}
+
+\section*{说明}
+
+本文档针对两位评审专家的意见，逐条说明修改内容、所在章节与落实方式。
+
+\vspace{0.5em}
+\noindent\textbf{评审编号}：
+\begin{itemize}[leftmargin=2em,itemsep=0.2em]
+  \item ZS-R-051-2026-162-01 \quad （教授评审，共 4 条意见）
+  \item ZS-R-051-2026-162-02 \quad （副教授评审，共 1 条意见）
+\end{itemize}
+
+%================================================
+\section{评审一（ZS-R-051-2026-162-02，副教授）}
+
+\subsection{意见 1.1：第三、四章公式系数确定与案例数据来源说明}
+
+\noindent\textbf{原意见：}第三、四章出现的公式中系数如何确定？案例数据的来源是什么以及应如何使用？应给予说明。
+
+\noindent\textbf{修改落实：}
+\begin{enumerate}[leftmargin=2em,itemsep=0.3em]
+  \item 在第三章、第四章\textbf{首次出现实证数据的段落}（第三章行业数据首段、第四章百度研发投入分布表前），以\textbf{脚注}形式在当前页底部说明数据来源，明确列出：
+    \begin{itemize}
+      \item 官方统计与监管披露来源（CNNIC、工信部、CAC）；
+      \item 上市公司年报 / SEC 20-F / 港交所披露；
+      \item 公开行业研究与咨询机构报告（IDC、麦肯锡、艾瑞、智联）；
+      \item 作者基于长期从业的结构化访谈与观察（仅用于半定性刻画）。
+    \end{itemize}
+    并声明"未使用任何百度未公开披露的内部数据"。
+  \item 针对带具体系数的公式（如永续盘存法折旧率 $\delta=15\%$），在对应段落就近标注引用来源。
+  \item 针对结构性公式（协作成本、AMO、人才流失成本等），改为\textbf{定性叙述}，避免"形式化而未标定"的问题。
+  \item 第四章末新增独立一节\textbf{《估算方法的局限与稳健性说明》}（4.5 节），从数据边界、案例外推、稳健性处理、AI 长期影响四个维度做出方法论交代。
+\end{enumerate}
+
+%================================================
+\section{评审二（ZS-R-051-2026-162-01，教授）}
+
+\subsection{意见 2.1：DORA / TA 指标以理论估算为主，缺乏实际数据；10.8--14.4 亿元规模测算的 15\%--20\% 参数缺来源}
+
+\noindent\textbf{原意见：}研究中关于 DORA 与 TA 指标的量化分析多以理论估算为主，缺乏实际运营数据的验证\ldots\ 并且关于 900--1200 名高级工程师被错配导致年度损失 10.8--14.4 亿元一处，15\%--20\% 的参数取值缺乏来源依据。
+
+\noindent\textbf{修改落实：}
+\begin{enumerate}[leftmargin=2em,itemsep=0.3em]
+  \item “运动式研发”错配成本由单点区间改写为\textbf{保守（10\%）/基准（15\%--20\%）/激进（25\%）三档情景}，新增\textbf{表 4.4：错配成本三档情景估算}（见下）。
+  \item 对研发人员规模、T7 占比、T7 与 T5 年综合成本等关键假设，通过\textbf{脚注}逐项标注来源与估算方式，明确声明“未使用任何百度未公开数据”。
+  \item 加入\textbf{敏感性分析文字}：错配比例 $r$ 每变动 5 个百分点，年度损失随之变动约 3.6 亿元；即便最保守情景，损失仍不低于 7 亿元量级——证明结论对参数取值不敏感。
+  \item 第四章末新增《估算方法局限》小节，明确承认 DORA 指标改善幅度是“量级估计而非前后严格对照统计”。
+\end{enumerate}
+
+\vspace{0.3em}
+\begin{center}
+\fontsize{9}{11}\selectfont
+\begin{tabular}{lccc}
+\toprule
+\textbf{情景} & \textbf{错配比例 $r$} & \textbf{错配人数} & \textbf{年度直接损失} \\
+\midrule
+保守 & 10\%       & 600 人        & 约 7.2 亿元 \\
+基准 & 15\%--20\% & 900--1200 人  & 约 10.8--14.4 亿元 \\
+激进 & 25\%       & 1500 人       & 约 18 亿元 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{意见 2.2：AMO 绩效模型、协作成本模型"为形式化而形式化"，建议简化}
+
+\noindent\textbf{原意见：}AMO 绩效模型与协作成本模型存在“为形式化而形式化”的嫌疑，参数取值缺乏充分依据，建议\textbf{简化模型}或\textbf{增加对参数依据的讨论}。
+
+\noindent\textbf{修改落实：}采用“简化”路线，共计\textbf{精简 5 个公式}：
+
+\begin{center}
+\fontsize{9}{11}\selectfont
+\begin{tabular}{lll}
+\toprule
+\textbf{公式标签} & \textbf{所在章节} & \textbf{处理方式} \\
+\midrule
+\texttt{eq:collaboration-cost} & 第四章 § 4.2 & 删除带 $d_{ij}^\beta \cdot \alpha^{l_{ij}}$ 参数项，保留 $C_n^2$ 组合数论证 \\
+\texttt{eq:amo-baidu}          & 第四章 § 4.3 & 删除 Cobb-Douglas 形式，改为三维算术均值评估 \\
+\texttt{eq:turnover-cost-detail} & 第三章 § 3.3 & 删除细化分项公式，保留 4 项成本定义 \\
+\texttt{eq:tech-debt}          & 第三章 § 3.3 & 删除差分方程，改为“存量—流量”叙述 \\
+\texttt{eq:debt-impact}        & 第三章 § 3.3 & 删除指数衰减公式，改为定性描述 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+保留的定量公式（$\eta_{\mathrm{TA}}$ 定义、技术资产周转率、永续盘存法等）均为\textbf{结构性定义}或已有明确参数来源（如 $\delta=15\%$），不属于“为形式化而形式化”之列。
+
+\subsection{意见 2.3：英文摘要标点不统一；参考文献 [4][5] 格式不一致}
+
+\noindent\textbf{原意见：}英文摘要中存在半角分号与句号混用的情况\ldots\ 参考文献 [4] [5] 的作者分隔与标点格式不一致。
+
+\noindent\textbf{修改落实：}已修正。
+
+\subsection{意见 2.4：图表跨页、缩略语表 AR / VR 与正文关联度低}
+
+\noindent\textbf{原意见：}部分图表存在跨页断行现象\ldots\ 缩略语表中 AR、VR 等缩略语与正文关联度较低。
+
+\noindent\textbf{修改落实：}
+
+\emph{(1) 图表跨页}：已修正。
+
+\emph{(2) 缩略语表精简}（\texttt{mydata/denotation.tex}）：按正文引用次数逐项核查，\textbf{删除 5 项}关联度低的条目：
+
+\begin{center}
+\fontsize{9}{11}\selectfont
+\begin{tabular}{lcc}
+\toprule
+\textbf{缩略语} & \textbf{正文引用次数} & \textbf{处理} \\
+\midrule
+AR（增强现实） & 1 & 删除 \\
+VR（虚拟现实） & 1 & 删除 \\
+DSIR           & 0 & 删除 \\
+PMO            & 1 & 删除 \\
+STS            & 1 & 删除 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+说明：原计划同步删除 IDC，经全文核查后发现 IDC 在正文中有 12 次实质引用（多次引述 IDC 行业研究报告），故予以保留。精简后缩略语表共 24 项，均在正文中有 $\geq 2$ 次实质引用。
+
+\vspace{1em}
+\hfill 特此说明。
+
+\end{document}

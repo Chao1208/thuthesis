@@ -1,0 +1,146 @@
+\documentclass[11pt,a4paper]{ctexart}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{xeCJK}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\setCJKmainfont{Songti SC}
+\setCJKsansfont{Heiti SC}
+\setmainfont{Times New Roman}
+
+\definecolor{accent}{HTML}{441351}
+\hypersetup{colorlinks=true, linkcolor=accent, urlcolor=accent}
+
+\titleformat{\section}{\sffamily\bfseries\large\color{accent}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\sffamily\bfseries\normalsize\color{accent!80!black}}{\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 评审后修正说明}
+\fancyhead[R]{\small 李超 · 2023211534}
+\fancyfoot[C]{\small \thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+
+\title{\textbf{评审后修正说明}\\
+\large《互联网公司研发管理面临的困境及应对策略研究——以B公司为例》}
+\author{李超 \quad 学号：2023211534 \quad 指导教师：肖勇波 教授}
+\date{2026 年 5 月 12 日}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{fancy}
+
+\section*{说明}
+
+本文档就两位评审专家提出的意见，逐条说明论文内容层面的修正。涉及排版、图表跨页、标点、参考文献格式等细节问题，一律已按评审要求修复完毕，不再在本说明中赘述技术细节。
+
+\vspace{0.5em}
+\noindent\textbf{评审编号}：
+\begin{itemize}[leftmargin=2em,itemsep=0.2em]
+  \item ZS-R-051-2026-162-01 \quad （教授评审，共 4 条意见）
+  \item ZS-R-051-2026-162-02 \quad （副教授评审，共 1 条意见）
+\end{itemize}
+
+%================================================
+\section{评审一（ZS-R-051-2026-162-02，副教授）}
+
+\subsection{意见 1.1：公式系数的确定与案例数据来源说明}
+
+\noindent\textbf{评审意见}：第三、四章中出现的公式其系数如何确定？案例中使用的数据，来源是什么、应如何使用？应给予明确说明。
+
+\vspace{0.3em}
+\noindent\textbf{修改说明}：
+
+第一，数据来源层面，在第三章首次引入行业实证数据的开篇段落与第四章第一次引入 B 公司实证数据的段落，以脚注形式集中声明数据来源范围，包括：官方统计与监管披露（CNNIC、工信部、CAC）、上市公司财务披露（B 公司年报与 SEC 20-F）、公开行业研究报告（IDC、麦肯锡、艾瑞、智联招聘、拉勾），以及作者 2019--2024 年在 B 公司技术体系的参与观察与结构化行业对比。明确声明“本研究未使用任何 B 公司未公开披露的内部数据”。
+
+第二，公式系数层面，对带具体参数的公式（如永续盘存法折旧率 $\delta=15\%$）就近标注文献出处；对原本“结构形式给定、参数缺乏标定”的公式（协作成本、AMO 绩效、人才流失成本、技术负债差分方程、技术负债对研发效率的指数影响）采取简化路径，将其替换为定性叙述或更简洁的算术形式，避免“为形式化而形式化”的嫌疑，具体处理见 2.2 意见的回应。
+
+第三，为使读者能系统理解本研究所用估算方法的边界，第四章末新增独立一节《估算方法的局限与稳健性说明》（§4.5），从数据边界、案例外推适用范围、稳健性处理、生成式 AI 等长期变量的影响四个维度做统一方法论交代。
+
+\vspace{0.3em}
+\noindent\emph{（相关排版、脚注格式、参考文献规范等技术细节，已经修复。）}
+
+%================================================
+\section{评审二（ZS-R-051-2026-162-01，教授）}
+
+\subsection{意见 2.1：DORA/TA 指标以理论估算为主；10.8--14.4 亿元规模测算的 15\%--20\% 参数缺来源}
+
+\noindent\textbf{评审意见}：研究中对 DORA 与 TA 指标的量化分析多以理论估算为主，缺乏实际运营数据验证；关于 900--1200 名高级工程师被错配导致年度损失 10.8--14.4 亿元处，15\%--20\% 的参数取值缺乏来源依据。
+
+\vspace{0.3em}
+\noindent\textbf{修改说明}：
+
+第一，将“运动式研发”错配成本由原单点区间改写为保守（$r=10\%$）、基准（$r=15\%$--$20\%$）、激进（$r=25\%$）三档情景，新增表 4.4 呈现三档参数下的错配人数与年度直接成本，保守情景 7.2 亿元、基准情景 10.8--14.4 亿元、激进情景约 18 亿元。
+
+第二，对关键假设——B 公司研发人员总规模、T7 及以上占比、T7 与 T5 年综合成本、错配比例区间——逐项以脚注标注来源与估算依据，包括 B 公司年报口径、拉勾与智联招聘公开职级分布基准、智联《2024 互联网行业人才流动与薪酬白皮书》薪酬数据及行业常规加成系数（基础薪酬×1.4--1.6 倍）。
+
+第三，补充敏感性分析：错配比例 $r$ 每变动 $\pm 5$ 个百分点，年度损失相应变动约 $\pm 3.6$ 亿元；即便在最保守情景下，损失仍不低于 7 亿元量级。据此说明“运动式研发存在显著经济代价”这一核心结论对参数取值并不敏感，具有稳健性。
+
+第四，在新增的 §4.5《估算方法的局限与稳健性说明》中，明确承认文中 DORA 指标的改善幅度为“量级估计而非前后严格对照统计”，并将 TA 周转率、错配成本等定量结论一并纳入稳健性说明的讨论范围，以免读者形成过度精确的预期。
+
+\subsection{意见 2.2：AMO 绩效模型、协作成本模型“为形式化而形式化”}
+
+\noindent\textbf{评审意见}：AMO 绩效模型与协作成本模型存在“为形式化而形式化”的嫌疑，参数取值缺乏充分依据，建议简化模型或增加对参数依据的讨论。
+
+\vspace{0.3em}
+\noindent\textbf{修改说明}：采纳“简化”路线，对全文公式做一次系统性删减，共计精简 5 个“结构形式给定、参数难以标定”的公式，保留具有结构性定义意义或已有明确参数来源的式子。具体处理如下：
+
+\begin{center}
+\fontsize{9}{11}\selectfont
+\begin{tabular}{lll}
+\toprule
+\textbf{原公式} & \textbf{所在章节} & \textbf{处理方式} \\
+\midrule
+协作成本模型 & 第四章 § 4.2 & 删除含 $d_{ij}^\beta \cdot \alpha^{l_{ij}}$ 的参数项，保留 $C_n^2$ 组合数论证与定性描述 \\
+AMO 绩效评估 & 第四章 § 4.3 & 删除 Cobb-Douglas 函数形式，改为三维算术均值评估，并重算当前与目标得分 \\
+人才流失成本细化 & 第三章 § 3.3 & 删除细化分项公式，保留四项成本维度的定义与文字说明 \\
+技术负债差分方程 & 第三章 § 3.3 & 删除差分方程，改为“存量—流量”叙述 \\
+技术负债对效率的影响 & 第三章 § 3.3 & 删除指数衰减公式，改为定性描述 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+保留的定量公式（$\eta_{\mathrm{TA}}$ 定义、TA 周转率、永续盘存法折旧率 $\delta=15\%$、错配成本公式等）均属结构性定义或已有明确参数来源，不在“为形式化而形式化”之列。经此精简，全文在保持分析框架完整性的同时，大幅降低了“模型—数据不匹配”的方法论风险。
+
+\subsection{意见 2.3：英文摘要标点不统一；参考文献 [4][5] 格式不一致}
+
+\noindent\emph{已经修复。}
+
+\subsection{意见 2.4：图表跨页断行；缩略语表中 AR/VR 等与正文关联度低}
+
+\noindent\textbf{评审意见}：部分图表存在跨页断行现象；缩略语表中 AR、VR 等缩略语与正文关联度较低。
+
+\vspace{0.3em}
+\noindent\textbf{修改说明}：
+
+第一，图表跨页与断行问题，\emph{已经修复}。
+
+第二，缩略语表按正文引用次数逐项核查，删除 5 项实质关联度低的条目：
+
+\begin{center}
+\fontsize{9}{11}\selectfont
+\begin{tabular}{lcc}
+\toprule
+\textbf{缩略语} & \textbf{正文引用次数} & \textbf{处理} \\
+\midrule
+AR（增强现实） & 1 & 删除 \\
+VR（虚拟现实） & 1 & 删除 \\
+DSIR           & 0 & 删除 \\
+PMO            & 1 & 删除 \\
+STS            & 1 & 删除 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+说明：原计划同步删除 IDC，经全文核查后发现 IDC 在正文中有 12 次实质引用（多处引述 IDC 行业研究报告与市场数据），故予以保留。精简后缩略语表共 24 项，均在正文中有 $\geq 2$ 次实质引用。
+
+\vspace{1em}
+\hfill 特此说明。
+
+\end{document}
